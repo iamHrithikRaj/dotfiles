@@ -14,10 +14,7 @@
 return {
   'iamcco/markdown-preview.nvim',
   ft = { 'markdown' },
-  build = function()
-    -- On Windows, use the pre-built binary install method
-    vim.fn['mkdp#util#install']()
-  end,
+  build = 'cd app && npm install',
   keys = {
     { '<leader>mp', '<cmd>MarkdownPreviewToggle<CR>', desc = '[M]arkdown [P]review toggle' },
   },
