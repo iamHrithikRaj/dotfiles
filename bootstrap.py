@@ -424,7 +424,8 @@ def install_nerd_font_linux(dry_run: bool):
     """Download and install JetBrainsMono Nerd Font on Linux."""
     font_dir = Path.home() / ".local" / "share" / "fonts"
     if (font_dir / "JetBrainsMonoNerdFont-Regular.ttf").exists():
-        print("  → Nerd Font: Already installed")
+        print("  → Installing JetBrainsMono Nerd Font")
+        print("    ✓ Already installed/configured")
         return
 
     print("  → Installing JetBrainsMono Nerd Font...")
@@ -466,7 +467,8 @@ def install_language_prerequisites(plat: str, dry_run: bool):
                 shell=True, capture_output=True, text=True,
             )
             if "nuget.org" in check.stdout.lower():
-                print("  → NuGet source: Already configured")
+                print("  → Configuring NuGet source")
+                print("    ✓ Already installed/configured")
             else:
                 run(
                     "dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org",
@@ -484,7 +486,8 @@ def install_system_tools(dry_run: bool):
     for lang_id, lang in LANGUAGES.items():
         for cmd, binary in lang.get("system_tools", []):
             if is_installed(binary) and not dry_run:
-                print(f"  → {binary}: Already installed")
+                print(f"  → Installing {binary} ({lang['label']})")
+                print(f"    ✓ Already installed/configured")
             else:
                 run(cmd, f"Installing {binary} ({lang['label']})", dry_run)
 
