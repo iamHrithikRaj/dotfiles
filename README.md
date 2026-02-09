@@ -1,8 +1,6 @@
-# 🚀 Dotfiles — Professional Neovim Dev Environment
+# Dotfiles
 
-**One command. Any machine. Full dev setup.**
-
-A cross-platform bootstrap that installs Neovim with a professional configuration for **C, C++, C#, Rust, Python, Markdown**, and more — complete with LSP, auto-formatting, linting, autocompletion, and a curated plugin set. Built on [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim).
+Neovim config and bootstrap script for C/C++, C#, Rust, Python, Markdown, JSON, XML, YAML. Built on [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim).
 
 ```bash
 git clone https://github.com/iamHrithikRaj/dotfiles.git
@@ -10,13 +8,13 @@ cd dotfiles
 python bootstrap.py
 ```
 
-That's it. The script handles **everything** — from installing Neovim and language toolchains to configuring your shell alias and downloading fonts.
+The script installs tools, clones kickstart.nvim, overlays the customized config, and sets up a `vim` → `nvim` alias. Safe to re-run — existing config is backed up with a timestamp.
 
 ---
 
-## ✨ What You Get
+## What's Included
 
-### Languages — Full LSP, Formatting & Linting Out of the Box
+### Language Support
 
 | Language | LSP | Formatter | Linter | Treesitter |
 |---|---|---|---|---|
@@ -50,9 +48,9 @@ That's it. The script handles **everything** — from installing Neovim and lang
 | [todo-comments.nvim](https://github.com/folke/todo-comments.nvim) | Highlight TODO/FIXME/NOTE in comments |
 | [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) | Premade snippets for all languages |
 
-### What the Bootstrap Script Installs
+### Bootstrap Installs
 
-The script detects your OS and installs everything you need:
+Tools installed per platform:
 
 | Tool | Windows | Linux | macOS |
 |---|---|---|---|
@@ -68,7 +66,7 @@ The script detects your OS and installs everything you need:
 
 ---
 
-## 📦 Quick Start
+## Setup
 
 ### 1. Prerequisites
 
@@ -80,7 +78,7 @@ The script detects your OS and installs everything you need:
 | Linux | `sudo apt install python3` (usually pre-installed) |
 | macOS | `brew install python` (usually pre-installed) |
 
-> ⚠ **Windows users**: Use the **python.org** version, not the Microsoft Store version. The Store version is sandboxed and breaks Mason package installs. The script detects this automatically and fixes it.
+**Windows note**: Use the python.org version, not the Microsoft Store version. The Store version is sandboxed and breaks Mason package installs. The script detects this and handles it.
 
 ### 2. Install
 
@@ -106,7 +104,7 @@ python bootstrap.py
 
 ---
 
-## ⌨️ Key Keymaps
+## Keymaps
 
 | Keymap | Action |
 |---|---|
@@ -126,13 +124,13 @@ python bootstrap.py
 | `gra` | Code action |
 | `<Space>ch` | Switch C/C++ source/header |
 
-> 💡 Press `<Space>` and wait — [which-key](https://github.com/folke/which-key.nvim) will show all available keybinds.
+Press `<Space>` and wait — [which-key](https://github.com/folke/which-key.nvim) shows all available keybinds.
 
 ---
 
-## 🔧 Adding / Removing Languages
+## Adding / Removing Languages
 
-The bootstrap script uses a **data-driven language registry**. Adding or removing a language means editing ONE dict in `bootstrap.py` — no other code changes needed.
+The bootstrap script uses a data-driven `LANGUAGES` registry. Adding or removing a language is a single dict edit in `bootstrap.py` — no logic changes needed.
 
 ### Example: Adding Go
 
@@ -157,11 +155,11 @@ Then re-run `python bootstrap.py`.
 
 ### Example: Removing XML
 
-Delete or comment out the `"xml"` entry in `LANGUAGES`. Done.
+Delete or comment out the `"xml"` entry in `LANGUAGES`.
 
 ---
 
-## 🛠 Bootstrap Options
+## Options
 
 ```bash
 python bootstrap.py              # Full install — tools + config
@@ -171,14 +169,14 @@ python bootstrap.py --skip-tools # Only install/update nvim config, skip tool in
 
 ### Re-running the Script
 
-The script is **idempotent** — safe to run multiple times:
+The script is idempotent:
 - Already-installed tools are skipped
 - Existing nvim config is backed up with a timestamp (`nvim.bak.20260209_053848`)
 - Config files are overlaid on top of the existing kickstart base
 
 ---
 
-## 📁 Repo Structure
+## Repo Structure
 
 ```
 dotfiles/
