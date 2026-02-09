@@ -89,7 +89,7 @@ LANGUAGES = {
         "plugin_file": "roslyn.lua",
         "system_tools": [("dotnet tool install -g csharpier", "csharpier")],
         "prerequisites": {
-            "windows": "winget install Microsoft.DotNet.SDK.9 --accept-source-agreements --accept-package-agreements",
+            "windows": "winget install Microsoft.DotNet.SDK.9 --silent --accept-source-agreements --accept-package-agreements",
             "linux_apt": "sudo apt install -y dotnet-sdk-9.0",
             "linux_dnf": "sudo dnf install -y dotnet-sdk-9.0",
             "macos": "brew install dotnet-sdk",
@@ -109,7 +109,7 @@ LANGUAGES = {
         "linters": {},
         "plugin_file": "rust.lua",
         "prerequisites": {
-            "windows": "winget install Rustlang.Rustup --accept-source-agreements --accept-package-agreements",
+            "windows": "winget install Rustlang.Rustup --silent --accept-source-agreements --accept-package-agreements",
             "linux_apt": "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y",
             "linux_dnf": "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y",
             "linux_pacman": "sudo pacman -S --noconfirm rustup && rustup default stable",
@@ -200,14 +200,14 @@ LANGUAGES = {
 
 CORE_TOOLS = {
     "windows": {
-        "Neovim": "winget install Neovim.Neovim --accept-source-agreements --accept-package-agreements",
-        "Git": "winget install Git.Git --accept-source-agreements --accept-package-agreements",
-        "ripgrep": "winget install BurntSushi.ripgrep.MSVC --accept-source-agreements --accept-package-agreements",
-        "fd": "winget install sharkdp.fd --accept-source-agreements --accept-package-agreements",
-        "CMake": "winget install Kitware.CMake --accept-source-agreements --accept-package-agreements",
-        "Node.js": "winget install OpenJS.NodeJS.LTS --accept-source-agreements --accept-package-agreements",
-        "Nerd Font": "winget install DEVCOM.JetBrainsMonoNerdFont --accept-source-agreements --accept-package-agreements",
-        "Oh My Posh": "winget install JanDeDobbeleer.OhMyPosh --source winget --accept-source-agreements --accept-package-agreements",
+        "Neovim": "winget install Neovim.Neovim --silent --accept-source-agreements --accept-package-agreements",
+        "Git": "winget install Git.Git --silent --accept-source-agreements --accept-package-agreements",
+        "ripgrep": "winget install BurntSushi.ripgrep.MSVC --silent --accept-source-agreements --accept-package-agreements",
+        "fd": "winget install sharkdp.fd --silent --accept-source-agreements --accept-package-agreements",
+        "CMake": "winget install Kitware.CMake --silent --accept-source-agreements --accept-package-agreements",
+        "Node.js": "winget install OpenJS.NodeJS.LTS --silent --accept-source-agreements --accept-package-agreements",
+        "Nerd Font": "winget install DEVCOM.JetBrainsMonoNerdFont --silent --accept-source-agreements --accept-package-agreements",
+        "Oh My Posh": "winget install JanDeDobbeleer.OhMyPosh --source winget --silent --accept-source-agreements --accept-package-agreements",
     },
     "linux_apt": {
         "Neovim + tools": "sudo apt update && sudo apt install -y neovim git ripgrep fd-find unzip gcc make cmake curl",
@@ -375,7 +375,7 @@ def ensure_real_python(dry_run: bool):
         # No Python at all — install it
         print("  → Python not found — installing python.org version")
         run(
-            "winget install Python.Python.3.12 --accept-source-agreements --accept-package-agreements",
+            "winget install Python.Python.3.12 --silent --accept-source-agreements --accept-package-agreements",
             "Installing Python (python.org)",
             dry_run,
         )
@@ -388,7 +388,7 @@ def ensure_real_python(dry_run: bool):
         print(f"       The Store version is sandboxed and breaks Mason's pip installs.")
         print(f"       Installing the full python.org version alongside it...")
         run(
-            "winget install Python.Python.3.12 --accept-source-agreements --accept-package-agreements",
+            "winget install Python.Python.3.12 --silent --accept-source-agreements --accept-package-agreements",
             "Installing Python (python.org — replaces Store version in PATH)",
             dry_run,
         )
