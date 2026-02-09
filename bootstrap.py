@@ -272,7 +272,11 @@ def get_nvim_config_path() -> Path:
 
 
 def run(cmd: str, desc: str, dry_run: bool = False) -> bool:
-    """Run a shell command with a description. Returns True on success."""
+    """Run a shell command with a description. Returns True on success.
+
+    Always continues execution — failures are logged and collected for a
+    summary at the end, but never stop the bootstrap process.
+    """
     print(f"  → {desc}")
     if dry_run:
         print(f"    [DRY RUN] {cmd}")
@@ -281,18 +285,32 @@ def run(cmd: str, desc: str, dry_run: bool = False) -> bool:
         # Use shell=True for cross-platform compatibility (handles pipes, &&, etc.)
         result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
         if result.returncode != 0:
+            # Combine stdout and stderr for full error context
+            output = (result.stderr.strip() + "\n" + result.stdout.strip()).strip()
             # Don't fail hard — some tools may already be installed
-            stderr = result.stderr.strip()
-            if "already installed" in stderr.lower() or "no applicable" in stderr.lower():
+            if "already installed" in output.lower() or "no applicable" in output.lower():
                 print(f"    ✓ Already installed")
                 return True
-            print(f"    ⚠  Warning: {stderr[:200]}")
+            # Log the full error so the developer can diagnose
+            print(f"    ⚠  FAILED (exit code {result.returncode})")
+            print(f"    ┌─ Command: {cmd}")
+            if output:
+                # Indent each line of output for readability
+                for line in output.splitlines()[:15]:  # Cap at 15 lines
+                    print(f"    │ {line}")
+            print(f"    └─ (continuing with remaining steps...)")
+            FAILURES.append({"step": desc, "cmd": cmd, "output": output[:500], "code": result.returncode})
             return False
         print(f"    ✓ Done")
         return True
     except Exception as e:
         print(f"    ✗ Error: {e}")
+        FAILURES.append({"step": desc, "cmd": cmd, "output": str(e), "code": -1})
         return False
+
+
+# Global list to collect all failures for the end-of-run summary
+FAILURES: list[dict] = []
 
 
 def is_installed(binary: str) -> bool:
@@ -475,9 +493,28 @@ def setup_vim_alias(plat: str, dry_run: bool):
 
 
 def print_summary(plat: str):
-    """Print post-install instructions."""
+    """Print post-install instructions and any failures."""
+
+    # Print failure summary first if there were any
+    if FAILURES:
+        print("\n" + "=" * 60)
+        print(f"  ⚠  {len(FAILURES)} STEP(S) FAILED")
+        print("=" * 60)
+        for i, f in enumerate(FAILURES, 1):
+            print(f"\n  [{i}] {f['step']}  (exit code {f['code']})")
+            print(f"      Command: {f['cmd']}")
+            if f["output"]:
+                for line in f["output"].splitlines()[:5]:
+                    print(f"      │ {line}")
+        print()
+        print("  These failures are non-fatal — the rest of the setup completed.")
+        print("  You can re-run the script to retry, or install these manually.")
+
     print("\n" + "=" * 60)
-    print("  ✅  SETUP COMPLETE!")
+    if FAILURES:
+        print("  ⚠  SETUP COMPLETED WITH WARNINGS")
+    else:
+        print("  ✅  SETUP COMPLETE!")
     print("=" * 60)
     print()
     print("  Installed languages:")
@@ -543,6 +580,10 @@ def main():
     install_nvim_config(args.dry_run)
     setup_vim_alias(plat, args.dry_run)
     print_summary(plat)
+
+    # Exit with error code if any steps failed (useful for CI/scripting)
+    if FAILURES:
+        sys.exit(1)
 
 
 if __name__ == "__main__":
