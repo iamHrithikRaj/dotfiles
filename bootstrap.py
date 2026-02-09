@@ -201,9 +201,6 @@ CORE_TOOLS = {
     "windows": {
         "Neovim": "winget install Neovim.Neovim --accept-source-agreements --accept-package-agreements",
         "Git": "winget install Git.Git --accept-source-agreements --accept-package-agreements",
-        # Install the full Python.org build — NOT the Microsoft Store version.
-        # The Store version runs in a sandbox and pip install fails for Mason packages.
-        "Python": "winget install Python.Python.3.12 --accept-source-agreements --accept-package-agreements",
         "ripgrep": "winget install BurntSushi.ripgrep.MSVC --accept-source-agreements --accept-package-agreements",
         "fd": "winget install sharkdp.fd --accept-source-agreements --accept-package-agreements",
         "CMake": "winget install Kitware.CMake --accept-source-agreements --accept-package-agreements",
@@ -343,6 +340,12 @@ def install_core_tools(plat: str, dry_run: bool):
     for name, cmd in tools.items():
         run(cmd, f"Installing {name}", dry_run)
 
+    # On Windows, check if Python is the Microsoft Store version (sandboxed).
+    # The Store version breaks Mason's pip installs because it can't write to
+    # its own package directories. If detected, install the python.org version.
+    if plat == "windows":
+        ensure_real_python(dry_run)
+
     # Install Nerd Font on Linux (not available via apt/dnf/pacman)
     if plat.startswith("linux"):
         install_nerd_font_linux(dry_run)
@@ -352,6 +355,43 @@ def install_core_tools(plat: str, dry_run: bool):
     # Without this, Mason will fail to install npm/pip packages on first run.
     if not dry_run:
         refresh_path(plat)
+
+
+def ensure_real_python(dry_run: bool):
+    """Detect Microsoft Store Python and install the full python.org version if needed.
+
+    The Store version lives in WindowsApps and runs in a sandbox — pip install
+    fails for Mason packages (ruff, cmake-language-server, clang-format, etc.).
+    """
+    python_path = shutil.which("python")
+
+    if python_path is None:
+        # No Python at all — install it
+        print("  → Python not found — installing python.org version")
+        run(
+            "winget install Python.Python.3.12 --accept-source-agreements --accept-package-agreements",
+            "Installing Python (python.org)",
+            dry_run,
+        )
+        return
+
+    # Check if the Python in PATH is the Microsoft Store version
+    python_path_lower = python_path.lower()
+    if "windowsapps" in python_path_lower or "pythonsoftwarefoundation" in python_path_lower:
+        print(f"  → ⚠  Detected Microsoft Store Python at: {python_path}")
+        print(f"       The Store version is sandboxed and breaks Mason's pip installs.")
+        print(f"       Installing the full python.org version alongside it...")
+        run(
+            "winget install Python.Python.3.12 --accept-source-agreements --accept-package-agreements",
+            "Installing Python (python.org — replaces Store version in PATH)",
+            dry_run,
+        )
+        if not dry_run:
+            print("    ℹ  After restarting your terminal, the python.org version will take priority.")
+            print("    ℹ  You can disable the Store version in:")
+            print("       Settings → Apps → Advanced app settings → App execution aliases")
+    else:
+        print(f"  → Python: OK ({python_path})")
 
 
 def refresh_path(plat: str):
