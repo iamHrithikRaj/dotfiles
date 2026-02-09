@@ -714,14 +714,6 @@ def main():
     setup_vim_alias(plat, args.dry_run)
     print_summary(plat)
 
-    # Prompt user to restart terminal so PATH changes take effect for Mason
-    if not args.dry_run and not args.skip_tools:
-        print("╔══════════════════════════════════════════╗")
-        print("║  ⚠  Please CLOSE and REOPEN your        ║")
-        print("║     terminal, then run 'nvim'.           ║")
-        print("╚══════════════════════════════════════════╝")
-        input("\n  Press Enter to exit...")
-
     # Exit with error code if any steps failed (useful for CI/scripting)
     if FAILURES:
         sys.exit(1)
