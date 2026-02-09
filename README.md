@@ -1,24 +1,8 @@
-# Neovim Dotfiles
+# 🚀 Dotfiles — Professional Neovim Dev Environment
 
-Professional Neovim development environment for C, C++, C#, Rust, Python, Markdown, and more.  
-Built on [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim) with language-specific enhancements.
+**One command. Any machine. Full dev setup.**
 
-## Quick Start
-
-### Prerequisites
-
-**Python 3** must be installed first (it's the only manual prerequisite).  
-⚠ **Windows users**: Install the **python.org** version, NOT the Microsoft Store version. The Store version is sandboxed and breaks Mason package installs.
-
-| OS | Command |
-|---|---|
-| Windows | `winget install Python.Python.3.12` |
-| Linux (apt) | `sudo apt install python3` (usually pre-installed) |
-| macOS | `brew install python` (usually pre-installed) |
-
-> **Tip**: If you already have the Store version, the bootstrap script will install the python.org version alongside it. After restarting your terminal, `python` should point to the correct one.
-
-### Install Everything
+A cross-platform bootstrap that installs Neovim with a professional configuration for **C, C++, C#, Rust, Python, Markdown**, and more — complete with LSP, auto-formatting, linting, autocompletion, and a curated plugin set. Built on [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim).
 
 ```bash
 git clone https://github.com/iamHrithikRaj/dotfiles.git
@@ -26,31 +10,13 @@ cd dotfiles
 python bootstrap.py
 ```
 
-> **Windows**: Run your terminal as **Administrator** (right-click → Run as administrator). `winget` needs admin to install system-wide packages. The script will warn you if you forget.
->
-> **Linux**: The script uses `sudo` for package installs — it will prompt for your password.
->
-> **macOS**: No elevated access needed (`brew` runs as your user).
+That's it. The script handles **everything** — from installing Neovim and language toolchains to configuring your shell alias and downloading fonts.
 
-That's it! The bootstrap script handles everything:
-- Installs Neovim, Node.js, .NET SDK, Rust, ripgrep, fd, cmake
-- Installs JetBrainsMono Nerd Font
-- Clones kickstart.nvim and overlays our customized config
-- Sets up `vim` → `nvim` alias
-- Configures NuGet and installs csharpier
+---
 
-### Post-Install
+## ✨ What You Get
 
-1. **Set your terminal font** to `JetBrainsMono Nerd Font`
-   - Windows Terminal: Settings → Profiles → Defaults → Appearance → Font face
-2. **Restart your terminal** (to pick up PATH changes)
-3. **Run `nvim`** — plugins install automatically on first launch
-4. Inside nvim, run `:Mason` to verify all tools installed
-5. Run `:checkhealth` to verify everything is working
-
-## What's Included
-
-### Languages & Tooling
+### Languages — Full LSP, Formatting & Linting Out of the Box
 
 | Language | LSP | Formatter | Linter | Treesitter |
 |---|---|---|---|---|
@@ -58,7 +24,7 @@ That's it! The bootstrap script handles everything:
 | C# | Roslyn (via roslyn.nvim) | csharpier | Roslyn | ✅ |
 | Rust | rust-analyzer (via rustaceanvim) | rustfmt | clippy | ✅ |
 | Python | pyright | ruff / black | ruff | ✅ |
-| Markdown | marksman | prettier | markdownlint | ✅ (+ mermaid) |
+| Markdown | marksman | prettier | markdownlint | ✅ (+mermaid) |
 | JSON | jsonls | prettier | — | ✅ |
 | XML | lemminx | xmlformatter | — | ✅ |
 | YAML | — | prettier | — | ✅ |
@@ -68,20 +34,79 @@ That's it! The bootstrap script handles everything:
 
 ### Plugins
 
-- **[telescope.nvim](https://github.com/nvim-telescope/telescope.nvim)** — Fuzzy finder for files, grep, LSP symbols
-- **[neo-tree.nvim](https://github.com/nvim-neo-tree/neo-tree.nvim)** — File explorer sidebar
-- **[gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim)** — Git status in gutter + hunk actions
-- **[blink.cmp](https://github.com/saghen/blink.cmp)** — Autocompletion with LSP + snippets
-- **[conform.nvim](https://github.com/stevearc/conform.nvim)** — Auto-formatting on save
-- **[nvim-lint](https://github.com/mfussenegger/nvim-lint)** — Asynchronous linting
-- **[roslyn.nvim](https://github.com/seblj/roslyn.nvim)** — C# LSP using Microsoft's Roslyn compiler
-- **[rustaceanvim](https://github.com/mrcjkb/rustaceanvim)** — Enhanced Rust support
-- **[markdown-preview.nvim](https://github.com/iamcco/markdown-preview.nvim)** — Live preview with Mermaid diagrams
-- **[which-key.nvim](https://github.com/folke/which-key.nvim)** — Shows pending keybinds
-- **[mini.nvim](https://github.com/nvim-mini/mini.nvim)** — Statusline, surround, text objects
-- **[todo-comments.nvim](https://github.com/folke/todo-comments.nvim)** — Highlight TODO/FIXME/NOTE comments
+| Plugin | What it does |
+|---|---|
+| [telescope.nvim](https://github.com/nvim-telescope/telescope.nvim) | Fuzzy finder — files, grep, LSP symbols, keymaps, everything |
+| [neo-tree.nvim](https://github.com/nvim-neo-tree/neo-tree.nvim) | File explorer sidebar |
+| [gitsigns.nvim](https://github.com/lewis6991/gitsigns.nvim) | Git signs in gutter + stage/reset hunks |
+| [blink.cmp](https://github.com/saghen/blink.cmp) | Fast autocompletion with LSP + snippets |
+| [conform.nvim](https://github.com/stevearc/conform.nvim) | Auto-format on save |
+| [nvim-lint](https://github.com/mfussenegger/nvim-lint) | Async linting |
+| [roslyn.nvim](https://github.com/seblj/roslyn.nvim) | C# LSP — same Roslyn compiler as Visual Studio |
+| [rustaceanvim](https://github.com/mrcjkb/rustaceanvim) | Enhanced Rust — hover actions, clippy, crate graph |
+| [markdown-preview.nvim](https://github.com/iamcco/markdown-preview.nvim) | Live browser preview with Mermaid diagram support |
+| [which-key.nvim](https://github.com/folke/which-key.nvim) | Discover keybinds as you type |
+| [mini.nvim](https://github.com/nvim-mini/mini.nvim) | Statusline, surround, text objects |
+| [todo-comments.nvim](https://github.com/folke/todo-comments.nvim) | Highlight TODO/FIXME/NOTE in comments |
+| [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) | Premade snippets for all languages |
 
-### Key Keymaps
+### What the Bootstrap Script Installs
+
+The script detects your OS and installs everything you need:
+
+| Tool | Windows | Linux | macOS |
+|---|---|---|---|
+| Neovim | `winget` | `apt`/`dnf`/`pacman` | `brew` |
+| Node.js | `winget` | `nodesource` / pkg mgr | `brew` |
+| .NET SDK | `winget` | `apt`/`dnf` | `brew` |
+| Rust (rustup) | `winget` | `rustup.rs` | `rustup.rs` |
+| ripgrep, fd, cmake | `winget` | pkg mgr | `brew` |
+| JetBrainsMono Nerd Font | `winget` | auto-download | `brew cask` |
+| Python (if missing/broken) | `winget` | — | — |
+| csharpier (C# formatter) | `dotnet tool` | `dotnet tool` | `dotnet tool` |
+| `vim` → `nvim` alias | PowerShell `$PROFILE` | `.bashrc`/`.zshrc` | `.bashrc`/`.zshrc` |
+
+---
+
+## 📦 Quick Start
+
+### 1. Prerequisites
+
+**Python 3** must be installed first (it's the only manual prerequisite).
+
+| OS | Command |
+|---|---|
+| Windows | `winget install Python.Python.3.12` |
+| Linux | `sudo apt install python3` (usually pre-installed) |
+| macOS | `brew install python` (usually pre-installed) |
+
+> ⚠ **Windows users**: Use the **python.org** version, not the Microsoft Store version. The Store version is sandboxed and breaks Mason package installs. The script detects this automatically and fixes it.
+
+### 2. Install
+
+```bash
+git clone https://github.com/iamHrithikRaj/dotfiles.git
+cd dotfiles
+python bootstrap.py
+```
+
+> **Windows**: Run as **Administrator** (right-click terminal → Run as administrator)  
+> **Linux**: Will prompt for `sudo` password  
+> **macOS**: No elevated access needed
+
+### 3. Post-Install
+
+1. **Set your terminal font** to `JetBrainsMono Nerd Font`
+   - Windows Terminal: Settings → Appearance → Font face
+   - iTerm2: Preferences → Profiles → Text → Font
+   - GNOME Terminal: Preferences → Profiles → Custom font
+2. **Close and reopen your terminal** (not just a new tab)
+3. **Run `nvim`** — plugins and tools install automatically on first launch
+4. Run `:checkhealth` inside nvim to verify everything is working
+
+---
+
+## ⌨️ Key Keymaps
 
 | Keymap | Action |
 |---|---|
@@ -99,12 +124,20 @@ That's it! The bootstrap script handles everything:
 | `grr` | Go to references |
 | `grn` | Rename symbol |
 | `gra` | Code action |
+| `<Space>ch` | Switch C/C++ source/header |
 
-## Adding a New Language
+> 💡 Press `<Space>` and wait — [which-key](https://github.com/folke/which-key.nvim) will show all available keybinds.
 
-Edit the `LANGUAGES` dict in `bootstrap.py`. Example — adding Go:
+---
+
+## 🔧 Adding / Removing Languages
+
+The bootstrap script uses a **data-driven language registry**. Adding or removing a language means editing ONE dict in `bootstrap.py` — no other code changes needed.
+
+### Example: Adding Go
 
 ```python
+# In bootstrap.py → LANGUAGES dict:
 "go": {
     "label": "Go",
     "treesitter": ["go", "gomod", "gosum"],
@@ -120,14 +153,51 @@ Edit the `LANGUAGES` dict in `bootstrap.py`. Example — adding Go:
 },
 ```
 
-Then re-run `python bootstrap.py`. No other code changes needed.
+Then re-run `python bootstrap.py`.
 
-## Bootstrap Options
+### Example: Removing XML
+
+Delete or comment out the `"xml"` entry in `LANGUAGES`. Done.
+
+---
+
+## 🛠 Bootstrap Options
 
 ```bash
-python bootstrap.py              # Full install
-python bootstrap.py --dry-run    # Preview what would be installed
-python bootstrap.py --skip-tools # Only install nvim config, skip tool installs
+python bootstrap.py              # Full install — tools + config
+python bootstrap.py --dry-run    # Preview what would happen (no changes made)
+python bootstrap.py --skip-tools # Only install/update nvim config, skip tool installs
+```
+
+### Re-running the Script
+
+The script is **idempotent** — safe to run multiple times:
+- Already-installed tools are skipped
+- Existing nvim config is backed up with a timestamp (`nvim.bak.20260209_053848`)
+- Config files are overlaid on top of the existing kickstart base
+
+---
+
+## 📁 Repo Structure
+
+```
+dotfiles/
+├── bootstrap.py                    # Cross-platform bootstrap script
+├── README.md
+└── nvim/                           # Neovim config (copied to ~/.config/nvim)
+    ├── init.lua                    # Main config — options, keymaps, plugins
+    ├── lazy-lock.json              # Pinned plugin versions
+    └── lua/
+        ├── custom/plugins/
+        │   ├── roslyn.lua          # C# LSP (Roslyn compiler)
+        │   ├── rust.lua            # Rust (rustaceanvim)
+        │   └── markdown.lua        # Markdown preview + Mermaid
+        └── kickstart/plugins/
+            ├── autopairs.lua       # Auto-close brackets/quotes
+            ├── gitsigns.lua        # Git keymaps
+            ├── indent_line.lua     # Indentation guides
+            ├── lint.lua            # Linting config
+            └── neo-tree.lua        # File explorer
 ```
 
 ## License
