@@ -598,9 +598,9 @@ def print_summary(plat: str):
 
     # Print failure summary first if there were any
     if FAILURES:
-        print("\n" + "=" * 60)
-        print(f"  ⚠  {len(FAILURES)} STEP(S) FAILED")
-        print("=" * 60)
+        print("\n╔══════════════════════════════════════════╗")
+        print(f"║  ⚠  {len(FAILURES)} step(s) failed                     ║")
+        print("╚══════════════════════════════════════════╝")
         for i, f in enumerate(FAILURES, 1):
             print(f"\n  [{i}] {f['step']}  (exit code {f['code']})")
             print(f"      Command: {f['cmd']}")
@@ -611,12 +611,14 @@ def print_summary(plat: str):
         print("  These failures are non-fatal — the rest of the setup completed.")
         print("  You can re-run the script to retry, or install these manually.")
 
-    print("\n" + "=" * 60)
     if FAILURES:
-        print("  ⚠  SETUP COMPLETED WITH WARNINGS")
+        print("\n╔══════════════════════════════════════════╗")
+        print("║  ⚠  Setup Completed With Warnings        ║")
+        print("╚══════════════════════════════════════════╝")
     else:
-        print("  ✅  SETUP COMPLETE!")
-    print("=" * 60)
+        print("\n╔══════════════════════════════════════════╗")
+        print("║  ✅  Setup Complete!                      ║")
+        print("╚══════════════════════════════════════════╝")
     print()
     print("  Installed languages:")
     for lang in LANGUAGES.values():
@@ -631,7 +633,6 @@ def print_summary(plat: str):
         print("       Terminal.app: Preferences → Profiles → Font → Change")
         print("       Alacritty: Edit ~/.config/alacritty/alacritty.toml → font.normal.family")
     else:
-        # Linux
         print("       GNOME Terminal: Preferences → Profiles → Custom font")
         print("       Konsole: Settings → Edit Current Profile → Appearance → Font")
         print("       Alacritty: Edit ~/.config/alacritty/alacritty.toml → font.normal.family")
@@ -715,10 +716,10 @@ def main():
 
     # Prompt user to restart terminal so PATH changes take effect for Mason
     if not args.dry_run and not args.skip_tools:
-        print("  ┌──────────────────────────────────────────────────────┐")
-        print("  │  ⚠  Please CLOSE and REOPEN your terminal now!      │")
-        print("  │  Then run 'nvim' to complete plugin/tool setup.     │")
-        print("  └──────────────────────────────────────────────────────┘")
+        print("╔══════════════════════════════════════════╗")
+        print("║  ⚠  Please CLOSE and REOPEN your        ║")
+        print("║     terminal, then run 'nvim'.           ║")
+        print("╚══════════════════════════════════════════╝")
         input("\n  Press Enter to exit...")
 
     # Exit with error code if any steps failed (useful for CI/scripting)
