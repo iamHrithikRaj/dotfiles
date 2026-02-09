@@ -201,6 +201,9 @@ CORE_TOOLS = {
     "windows": {
         "Neovim": "winget install Neovim.Neovim --accept-source-agreements --accept-package-agreements",
         "Git": "winget install Git.Git --accept-source-agreements --accept-package-agreements",
+        # Install the full Python.org build — NOT the Microsoft Store version.
+        # The Store version runs in a sandbox and pip install fails for Mason packages.
+        "Python": "winget install Python.Python.3.12 --accept-source-agreements --accept-package-agreements",
         "ripgrep": "winget install BurntSushi.ripgrep.MSVC --accept-source-agreements --accept-package-agreements",
         "fd": "winget install sharkdp.fd --accept-source-agreements --accept-package-agreements",
         "CMake": "winget install Kitware.CMake --accept-source-agreements --accept-package-agreements",

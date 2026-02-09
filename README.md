@@ -7,13 +7,16 @@ Built on [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim) with langu
 
 ### Prerequisites
 
-**Python 3** must be installed first (it's the only manual prerequisite):
+**Python 3** must be installed first (it's the only manual prerequisite).  
+⚠ **Windows users**: Install the **python.org** version, NOT the Microsoft Store version. The Store version is sandboxed and breaks Mason package installs.
 
 | OS | Command |
 |---|---|
 | Windows | `winget install Python.Python.3.12` |
 | Linux (apt) | `sudo apt install python3` (usually pre-installed) |
 | macOS | `brew install python` (usually pre-installed) |
+
+> **Tip**: If you already have the Store version, the bootstrap script will install the python.org version alongside it. After restarting your terminal, `python` should point to the correct one.
 
 ### Install Everything
 
