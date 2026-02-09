@@ -31,6 +31,7 @@ import platform
 import shutil
 import subprocess
 import sys
+from datetime import datetime
 from pathlib import Path
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -399,7 +400,6 @@ def refresh_path(plat: str):
     if plat == "windows":
         # On Windows, winget installs update the registry PATH but not the
         # current process. Re-read Machine + User PATH from the registry.
-        machine = os.environ.get("PATH", "")
         result = subprocess.run(
             'powershell -NoProfile -Command "[System.Environment]::GetEnvironmentVariable(\'Path\',\'Machine\') + \';\' + [System.Environment]::GetEnvironmentVariable(\'Path\',\'User\')"',
             shell=True, capture_output=True, text=True,
@@ -509,7 +509,6 @@ def install_nvim_config(dry_run: bool):
 
     if config_path.exists():
         # Timestamped backup so re-runs don't overwrite previous backups
-        from datetime import datetime
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         bak_path = Path(str(config_path) + f".bak.{timestamp}")
         print(f"  → Existing config found at {config_path}")
@@ -566,7 +565,7 @@ def setup_vim_alias(plat: str, dry_run: bool):
             profile_path.parent.mkdir(parents=True, exist_ok=True)
             with open(profile_path, "a") as f:
                 f.write(f"\n# Neovim alias — use 'vim' to open nvim\n{alias_line}\n")
-        print("    ✓ Done (restart terminal to take effect)")
+        print("    ✓ Done")
 
     else:
         # Add alias to shell rc file
@@ -586,7 +585,7 @@ def setup_vim_alias(plat: str, dry_run: bool):
         if not dry_run:
             with open(rc_file, "a") as f:
                 f.write(f"\n# Neovim alias — use 'vim' to open nvim\n{alias_line}\n")
-        print("    ✓ Done (restart terminal or run: source " + str(rc_file) + ")")
+        print("    ✓ Done")
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -636,18 +635,10 @@ def print_summary(plat: str):
         print("       GNOME Terminal: Preferences → Profiles → Custom font")
         print("       Konsole: Settings → Edit Current Profile → Appearance → Font")
         print("       Alacritty: Edit ~/.config/alacritty/alacritty.toml → font.normal.family")
-    print("    2. ⚠ CLOSE AND REOPEN your terminal (not just a new tab!)")
-    print("       This is required so nvim and Mason can find newly installed tools.")
+    print("    2. Close and reopen your terminal (not just a new tab)")
     print("    3. Run 'nvim' — plugins install automatically on first launch")
     print("    4. Inside nvim, run ':Mason' to verify all tools installed")
-    print("       If any Mason packages fail, close terminal, reopen, and run nvim again.")
     print("    5. Run ':checkhealth' to verify everything is working")
-    print()
-    print("  Keymaps cheat sheet:")
-    print("    <Space>sf  — Search files       <Space>sg  — Search by grep")
-    print("    <Space>f   — Format buffer       \\         — Toggle file tree")
-    print("    <Space>mp  — Markdown preview    <Space>th — Toggle inlay hints")
-    print("    <Space>bn  — Next buffer         <Space>bp — Previous buffer")
     print()
 
 
@@ -658,8 +649,12 @@ def check_privileges(plat: str, skip_tools: bool):
 
     if plat == "windows":
         # winget requires admin to install system-wide packages
-        import ctypes
-        if not ctypes.windll.shell32.IsUserAnAdmin():
+        try:
+            import ctypes
+            is_admin = ctypes.windll.shell32.IsUserAnAdmin()
+        except Exception:
+            is_admin = False
+        if not is_admin:
             print("\n  ⚠  WARNING: Not running as Administrator!")
             print("     winget needs admin to install tools (Neovim, Node.js, etc.)")
             print("     Right-click your terminal → 'Run as administrator' and try again.")
