@@ -8,7 +8,7 @@ cd dotfiles
 python bootstrap.py
 ```
 
-The script installs tools, clones kickstart.nvim, overlays the customized config, and sets up a `vim` → `nvim` alias. Safe to re-run — existing config is backed up with a timestamp.
+The script installs tools, clones kickstart.nvim, overlays the customized config, and sets up a `vim` → `nvim` alias. Idempotent — safe to re-run; existing config is backed up with a timestamp.
 
 ---
 
@@ -84,11 +84,7 @@ Tools installed per platform:
 
 ### 2. Install
 
-```bash
-git clone https://github.com/iamHrithikRaj/dotfiles.git
-cd dotfiles
-python bootstrap.py
-```
+See the clone + run commands at the top of this README.
 
 > **Windows**: Run as **Administrator** (right-click terminal → Run as administrator)  
 > **Linux**: Will prompt for `sudo` password  
@@ -132,7 +128,7 @@ Press `<Space>` and wait — [which-key](https://github.com/folke/which-key.nvim
 
 ## Adding / Removing Languages
 
-The bootstrap script uses a data-driven `LANGUAGES` registry. Adding or removing a language is a single dict edit in `bootstrap.py` — no logic changes needed.
+The bootstrap script uses a data-driven `LANGUAGES` registry — no logic changes needed to add or remove a language.
 
 ### Example: Adding Go
 
@@ -171,10 +167,7 @@ python bootstrap.py --skip-tools # Only install/update nvim config, skip tool in
 
 ### Re-running the Script
 
-The script is idempotent:
-- Already-installed tools are skipped
-- Existing nvim config is backed up with a timestamp (`nvim.bak.20260209_053848`)
-- Config files are overlaid on top of the existing kickstart base
+The script is idempotent — already-installed tools are skipped, existing nvim config is backed up with a timestamp, and config files are overlaid on top of the existing kickstart base.
 
 ---
 
