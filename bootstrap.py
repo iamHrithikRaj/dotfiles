@@ -287,9 +287,16 @@ def run(cmd: str, desc: str, dry_run: bool = False) -> bool:
         if result.returncode != 0:
             # Combine stdout and stderr for full error context
             output = (result.stderr.strip() + "\n" + result.stdout.strip()).strip()
-            # Don't fail hard — some tools may already be installed
-            if "already installed" in output.lower() or "no applicable" in output.lower():
-                print(f"    ✓ Already installed")
+            # Don't fail hard — some tools may already be installed/configured
+            already_ok_patterns = [
+                "already installed",
+                "no applicable",
+                "already exists",
+                "no update available",
+                "is already configured",
+            ]
+            if any(p in output.lower() for p in already_ok_patterns):
+                print(f"    ✓ Already installed/configured")
                 return True
             # Log the full error so the developer can diagnose
             print(f"    ⚠  FAILED (exit code {result.returncode})")
@@ -374,13 +381,23 @@ def install_language_prerequisites(plat: str, dry_run: bool):
             run(cmd, f"{lang['label']} prerequisites", dry_run)
 
     # Configure NuGet source if .NET SDK is present (needed for csharpier)
+    # This is idempotent — if the source already exists, dotnet returns an error
+    # which we handle gracefully by checking first.
     if "csharp" in LANGUAGES:
         if is_installed("dotnet") or dry_run:
-            run(
-                "dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org",
-                "Configuring NuGet source",
-                dry_run,
+            # Check if nuget.org source already exists before adding
+            check = subprocess.run(
+                "dotnet nuget list source",
+                shell=True, capture_output=True, text=True,
             )
+            if "nuget.org" in check.stdout.lower():
+                print("  → NuGet source: Already configured")
+            else:
+                run(
+                    "dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org",
+                    "Configuring NuGet source",
+                    dry_run,
+                )
 
 
 def install_system_tools(dry_run: bool):
