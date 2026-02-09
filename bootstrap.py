@@ -415,7 +415,13 @@ def install_system_tools(dry_run: bool):
 
 
 def install_nvim_config(dry_run: bool):
-    """Clone kickstart.nvim and overlay our customized config."""
+    """Clone kickstart.nvim and overlay our customized config.
+
+    Behavior:
+    - Fresh install:  Clones kickstart.nvim → overlays our files on top
+    - Re-run (update): Backs up existing config (timestamped) → overlays new files
+    - The backup is timestamped so multiple re-runs never overwrite previous backups
+    """
     print("\n╔══════════════════════════════════════════╗")
     print("║  Installing Neovim Config                ║")
     print("╚══════════════════════════════════════════╝")
@@ -424,23 +430,24 @@ def install_nvim_config(dry_run: bool):
     repo_nvim_dir = Path(__file__).parent / "nvim"
 
     if config_path.exists():
-        print(f"  → Neovim config already exists at {config_path}")
-        print(f"    Backing up to {config_path}.bak")
+        # Timestamped backup so re-runs don't overwrite previous backups
+        from datetime import datetime
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        bak_path = Path(str(config_path) + f".bak.{timestamp}")
+        print(f"  → Existing config found at {config_path}")
+        print(f"    Backing up to {bak_path.name}")
         if not dry_run:
-            bak_path = Path(str(config_path) + ".bak")
-            if bak_path.exists():
-                shutil.rmtree(bak_path)
             shutil.copytree(config_path, bak_path)
 
-    # Clone kickstart.nvim as the base
+    # Clone kickstart.nvim as the base (only on fresh install)
     if not (config_path / ".git").exists():
         run(
             f'git clone https://github.com/nvim-lua/kickstart.nvim.git "{config_path}"',
-            "Cloning kickstart.nvim",
+            "Cloning kickstart.nvim (fresh install)",
             dry_run,
         )
     else:
-        print("  → kickstart.nvim already cloned")
+        print("  → kickstart.nvim base already present — updating config files")
 
     # Overlay our customized files on top of kickstart
     print("  → Overlaying customized config files...")
