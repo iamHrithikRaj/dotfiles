@@ -624,6 +624,15 @@ def print_summary(plat: str):
     print("    1. Set your terminal font to 'JetBrainsMono Nerd Font'")
     if plat == "windows":
         print("       Windows Terminal → Settings → Appearance → Font face")
+    elif plat == "macos":
+        print("       iTerm2: Preferences → Profiles → Text → Font")
+        print("       Terminal.app: Preferences → Profiles → Font → Change")
+        print("       Alacritty: Edit ~/.config/alacritty/alacritty.toml → font.normal.family")
+    else:
+        # Linux
+        print("       GNOME Terminal: Preferences → Profiles → Custom font")
+        print("       Konsole: Settings → Edit Current Profile → Appearance → Font")
+        print("       Alacritty: Edit ~/.config/alacritty/alacritty.toml → font.normal.family")
     print("    2. ⚠ CLOSE AND REOPEN your terminal (not just a new tab!)")
     print("       This is required so nvim and Mason can find newly installed tools.")
     print("    3. Run 'nvim' — plugins install automatically on first launch")
