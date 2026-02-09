@@ -23,6 +23,12 @@ cd dotfiles
 python bootstrap.py
 ```
 
+> **Windows**: Run your terminal as **Administrator** (right-click → Run as administrator). `winget` needs admin to install system-wide packages. The script will warn you if you forget.
+>
+> **Linux**: The script uses `sudo` for package installs — it will prompt for your password.
+>
+> **macOS**: No elevated access needed (`brew` runs as your user).
+
 That's it! The bootstrap script handles everything:
 - Installs Neovim, Node.js, .NET SDK, Rust, ripgrep, fd, cmake
 - Installs JetBrainsMono Nerd Font

@@ -538,6 +538,26 @@ def print_summary(plat: str):
     print()
 
 
+def check_privileges(plat: str, skip_tools: bool):
+    """Warn if running without required privileges for tool installation."""
+    if skip_tools:
+        return  # No tool installs — no privileges needed
+
+    if plat == "windows":
+        # winget requires admin to install system-wide packages
+        import ctypes
+        if not ctypes.windll.shell32.IsUserAnAdmin():
+            print("\n  ⚠  WARNING: Not running as Administrator!")
+            print("     winget needs admin to install tools (Neovim, Node.js, etc.)")
+            print("     Right-click your terminal → 'Run as administrator' and try again.")
+            print("     Or use --skip-tools to only install the Neovim config.\n")
+            response = input("  Continue anyway? [y/N] ").strip().lower()
+            if response != "y":
+                sys.exit(0)
+    # Linux: sudo is embedded in the commands — it will prompt for password
+    # macOS: brew runs without sudo
+
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # MAIN
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -571,6 +591,10 @@ def main():
 
     if args.dry_run:
         print("\n  🔍 DRY RUN MODE — no changes will be made\n")
+
+    # Check for admin/sudo before attempting tool installs
+    if not args.dry_run:
+        check_privileges(plat, args.skip_tools)
 
     if not args.skip_tools:
         install_core_tools(plat, args.dry_run)
