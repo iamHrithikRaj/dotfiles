@@ -65,6 +65,7 @@ Tools installed per platform:
 | Python (if missing/broken) | `winget` | — | — |
 | csharpier (C# formatter) | `dotnet tool` | `dotnet tool` | `dotnet tool` |
 | `vim` → `nvim` alias | PowerShell `$PROFILE` | `.bashrc`/`.zshrc` | `.bashrc`/`.zshrc` |
+| Oh My Posh | `winget` | `brew` | `brew` |
 
 ---
 

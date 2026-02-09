@@ -207,23 +207,28 @@ CORE_TOOLS = {
         "CMake": "winget install Kitware.CMake --accept-source-agreements --accept-package-agreements",
         "Node.js": "winget install OpenJS.NodeJS.LTS --accept-source-agreements --accept-package-agreements",
         "Nerd Font": "winget install DEVCOM.JetBrainsMonoNerdFont --accept-source-agreements --accept-package-agreements",
+        "Oh My Posh": "winget install JanDeDobbeleer.OhMyPosh --source winget --accept-source-agreements --accept-package-agreements",
     },
     "linux_apt": {
         "Neovim + tools": "sudo apt update && sudo apt install -y neovim git ripgrep fd-find unzip gcc make cmake curl",
         "Node.js": "curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - && sudo apt install -y nodejs",
+        "Oh My Posh": "brew install jandedobbeleer/oh-my-posh/oh-my-posh",
     },
     "linux_dnf": {
         "Neovim + tools": "sudo dnf install -y neovim git ripgrep fd-find unzip gcc make cmake curl",
         "Node.js": "sudo dnf install -y nodejs",
+        "Oh My Posh": "brew install jandedobbeleer/oh-my-posh/oh-my-posh",
     },
     "linux_pacman": {
         "Neovim + tools": "sudo pacman -S --noconfirm --needed neovim git ripgrep fd unzip gcc make cmake curl",
         "Node.js": "sudo pacman -S --noconfirm --needed nodejs npm",
+        "Oh My Posh": "brew install jandedobbeleer/oh-my-posh/oh-my-posh",
     },
     "macos": {
         "Neovim + tools": "brew install neovim git ripgrep fd cmake",
         "Node.js": "brew install node",
         "Nerd Font": "brew install --cask font-jetbrains-mono-nerd-font",
+        "Oh My Posh": "brew install jandedobbeleer/oh-my-posh/oh-my-posh",
     },
 }
 
