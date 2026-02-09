@@ -344,6 +344,38 @@ def install_core_tools(plat: str, dry_run: bool):
     if plat.startswith("linux"):
         install_nerd_font_linux(dry_run)
 
+    # Refresh PATH so newly installed tools (Node.js, Python, etc.) are
+    # available to subsequent steps in this same terminal session.
+    # Without this, Mason will fail to install npm/pip packages on first run.
+    if not dry_run:
+        refresh_path(plat)
+
+
+def refresh_path(plat: str):
+    """Reload PATH from the registry/environment so newly installed tools are found."""
+    if plat == "windows":
+        # On Windows, winget installs update the registry PATH but not the
+        # current process. Re-read Machine + User PATH from the registry.
+        machine = os.environ.get("PATH", "")
+        result = subprocess.run(
+            'powershell -NoProfile -Command "[System.Environment]::GetEnvironmentVariable(\'Path\',\'Machine\') + \';\' + [System.Environment]::GetEnvironmentVariable(\'Path\',\'User\')"',
+            shell=True, capture_output=True, text=True,
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            os.environ["PATH"] = result.stdout.strip()
+            print("  → PATH refreshed (new tools now available in this session)")
+    else:
+        # On Linux/macOS, tools installed via apt/brew/pacman are already in
+        # standard PATH locations. Source common profile files for extras.
+        for rc in ["~/.cargo/env", "~/.bashrc", "~/.zshrc"]:
+            expanded = os.path.expanduser(rc)
+            if os.path.isfile(expanded):
+                # Can't source bash files from Python, but cargo/env just adds to PATH
+                if "cargo" in rc:
+                    cargo_bin = os.path.expanduser("~/.cargo/bin")
+                    if cargo_bin not in os.environ.get("PATH", ""):
+                        os.environ["PATH"] = cargo_bin + os.pathsep + os.environ.get("PATH", "")
+
 
 def install_nerd_font_linux(dry_run: bool):
     """Download and install JetBrainsMono Nerd Font on Linux."""
@@ -549,9 +581,11 @@ def print_summary(plat: str):
     print("    1. Set your terminal font to 'JetBrainsMono Nerd Font'")
     if plat == "windows":
         print("       Windows Terminal → Settings → Appearance → Font face")
-    print("    2. Restart your terminal (to pick up PATH changes)")
+    print("    2. ⚠ CLOSE AND REOPEN your terminal (not just a new tab!)")
+    print("       This is required so nvim and Mason can find newly installed tools.")
     print("    3. Run 'nvim' — plugins install automatically on first launch")
     print("    4. Inside nvim, run ':Mason' to verify all tools installed")
+    print("       If any Mason packages fail, close terminal, reopen, and run nvim again.")
     print("    5. Run ':checkhealth' to verify everything is working")
     print()
     print("  Keymaps cheat sheet:")
@@ -628,6 +662,14 @@ def main():
     install_nvim_config(args.dry_run)
     setup_vim_alias(plat, args.dry_run)
     print_summary(plat)
+
+    # Prompt user to restart terminal so PATH changes take effect for Mason
+    if not args.dry_run and not args.skip_tools:
+        print("  ┌──────────────────────────────────────────────────────┐")
+        print("  │  ⚠  Please CLOSE and REOPEN your terminal now!      │")
+        print("  │  Then run 'nvim' to complete plugin/tool setup.     │")
+        print("  └──────────────────────────────────────────────────────┘")
+        input("\n  Press Enter to exit...")
 
     # Exit with error code if any steps failed (useful for CI/scripting)
     if FAILURES:
