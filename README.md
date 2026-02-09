@@ -1,6 +1,6 @@
 # Dotfiles
 
-Neovim config and bootstrap script for C/C++, C#, Rust, Python, Markdown, JSON, XML, YAML. Built on [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim).
+Bootstrapped Neovim config built on [kickstart.nvim](https://github.com/nvim-lua/kickstart.nvim). Ships with LSP, formatting, linting, and treesitter for several languages out of the box, but the setup is data-driven — adding or removing a language is a single dict edit in `bootstrap.py`.
 
 ```bash
 git clone https://github.com/iamHrithikRaj/dotfiles.git
@@ -14,7 +14,9 @@ The script installs tools, clones kickstart.nvim, overlays the customized config
 
 ## What's Included
 
-### Language Support
+### Languages (default set)
+
+These ship out of the box. See [Adding / Removing Languages](#adding--removing-languages) to customize.
 
 | Language | LSP | Formatter | Linter | Treesitter |
 |---|---|---|---|---|
