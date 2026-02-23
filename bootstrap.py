@@ -551,6 +551,40 @@ def install_nvim_config(dry_run: bool):
     print(f"  ✓ Config installed to {config_path}")
 
 
+def get_shell_profile(plat: str):
+    """Return the path to the user's shell profile file."""
+    if plat == "windows":
+        return (
+            Path(os.environ.get("USERPROFILE", ""))
+            / "Documents"
+            / "PowerShell"
+            / "Microsoft.PowerShell_profile.ps1"
+        )
+    shell = os.environ.get("SHELL", "/bin/bash")
+    if "zsh" in shell:
+        return Path.home() / ".zshrc"
+    return Path.home() / ".bashrc"
+
+
+def ensure_shell_profile(plat: str, dry_run: bool):
+    """Ensure the shell profile file exists (create it if missing)."""
+    print("\n╔══════════════════════════════════════════╗")
+    print("║  Ensuring shell profile exists           ║")
+    print("╚══════════════════════════════════════════╝")
+
+    profile = get_shell_profile(plat)
+
+    if profile.exists():
+        print(f"  → {profile} already exists")
+        return
+
+    print(f"  → Creating {profile}")
+    if not dry_run:
+        profile.parent.mkdir(parents=True, exist_ok=True)
+        profile.touch()
+    print("    ✓ Done")
+
+
 def setup_vim_alias(plat: str, dry_run: bool):
     """Set up 'vim' command to open nvim."""
     print("\n╔══════════════════════════════════════════╗")
@@ -558,8 +592,7 @@ def setup_vim_alias(plat: str, dry_run: bool):
     print("╚══════════════════════════════════════════╝")
 
     if plat == "windows":
-        # Add alias to PowerShell profile
-        profile_path = Path(os.environ.get("USERPROFILE", "")) / "Documents" / "PowerShell" / "Microsoft.PowerShell_profile.ps1"
+        profile_path = get_shell_profile(plat)
         alias_line = "Set-Alias -Name vim -Value nvim"
 
         if profile_path.exists() and alias_line in profile_path.read_text():
@@ -568,19 +601,12 @@ def setup_vim_alias(plat: str, dry_run: bool):
 
         print(f"  → Adding alias to {profile_path}")
         if not dry_run:
-            profile_path.parent.mkdir(parents=True, exist_ok=True)
             with open(profile_path, "a") as f:
                 f.write(f"\n# Neovim alias — use 'vim' to open nvim\n{alias_line}\n")
         print("    ✓ Done")
 
     else:
-        # Add alias to shell rc file
-        shell = os.environ.get("SHELL", "/bin/bash")
-        if "zsh" in shell:
-            rc_file = Path.home() / ".zshrc"
-        else:
-            rc_file = Path.home() / ".bashrc"
-
+        rc_file = get_shell_profile(plat)
         alias_line = "alias vim='nvim'"
 
         if rc_file.exists() and alias_line in rc_file.read_text():
@@ -617,12 +643,7 @@ def setup_powerfetch(plat: str, dry_run: bool):
         print("    ✓ Script installed")
 
         # Add function to PowerShell profile
-        profile_path = (
-            Path(os.environ.get("USERPROFILE", ""))
-            / "Documents"
-            / "PowerShell"
-            / "Microsoft.PowerShell_profile.ps1"
-        )
+        profile_path = get_shell_profile(plat)
         func_marker = "function powerfetch"
 
         if profile_path.exists() and func_marker in profile_path.read_text():
@@ -637,7 +658,6 @@ def setup_powerfetch(plat: str, dry_run: bool):
         )
         print(f"  → Adding powerfetch function to {profile_path}")
         if not dry_run:
-            profile_path.parent.mkdir(parents=True, exist_ok=True)
             with open(profile_path, "a") as f:
                 f.write(func_block)
         print("    ✓ Done")
@@ -653,8 +673,7 @@ def setup_powerfetch(plat: str, dry_run: bool):
             shutil.copy2(repo_script, dest_script)
         print("    ✓ Script installed")
 
-        shell = os.environ.get("SHELL", "/bin/bash")
-        rc_file = Path.home() / (".zshrc" if "zsh" in shell else ".bashrc")
+        rc_file = get_shell_profile(plat)
         func_marker = "function powerfetch"
         alias_line = f"function powerfetch {{ pwsh -NoProfile -File '{dest_script}' \"$@\"; }}"
 
@@ -670,6 +689,32 @@ def setup_powerfetch(plat: str, dry_run: bool):
                     f"{alias_line}\n"
                 )
         print("    ✓ Done")
+
+
+def setup_oh_my_posh(plat: str, dry_run: bool):
+    """Add Oh My Posh init line to the shell profile."""
+    print("\n╔══════════════════════════════════════════╗")
+    print("║  Setting up Oh My Posh prompt            ║")
+    print("╚══════════════════════════════════════════╝")
+
+    profile = get_shell_profile(plat)
+
+    if plat == "windows":
+        init_line = "oh-my-posh init pwsh | Invoke-Expression"
+    else:
+        shell = os.environ.get("SHELL", "/bin/bash")
+        shell_name = "zsh" if "zsh" in shell else "bash"
+        init_line = f'eval "$(oh-my-posh init {shell_name})"'
+
+    if profile.exists() and init_line in profile.read_text():
+        print("  → Oh My Posh already configured in profile")
+        return
+
+    print(f"  → Adding Oh My Posh init to {profile}")
+    if not dry_run:
+        with open(profile, "a") as f:
+            f.write(f"\n# Oh My Posh prompt\n{init_line}\n")
+    print("    ✓ Done")
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -795,8 +840,10 @@ def main():
         install_system_tools(args.dry_run)
 
     install_nvim_config(args.dry_run)
+    ensure_shell_profile(plat, args.dry_run)
     setup_vim_alias(plat, args.dry_run)
     setup_powerfetch(plat, args.dry_run)
+    setup_oh_my_posh(plat, args.dry_run)
     print_summary(plat)
 
     # Exit with error code if any steps failed (useful for CI/scripting)
