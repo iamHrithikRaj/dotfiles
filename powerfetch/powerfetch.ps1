@@ -12,7 +12,6 @@
 #
 # Bundled here for convenience. All credit belongs to the original authors.
 # ─────────────────────────────────────────────────────────────────────────────
-
 <#
     .SYNOPSIS
     Presents system information in a visually appealing, human-readable way.
@@ -66,9 +65,9 @@ if ($unix) {
          'Name' = $disk.Name
          'Size' = "$([Math]::Round( ($disk.Size - $disk.FreeSpace) / 1GB)) / $([Math]::Round($disk.Size / 1GB)) GB"
          'Perc' = switch ([Math]::Round(100 - ($disk.FreeSpace / $disk.Size) * 100)) {
-                { $_ -gt 90 } { "([91m$_%[0m)"; break }
-                { $_ -gt 70 } { "([93m$_%[0m)"        }
-                default       { "([92m$_%[0m)"        }
+                { $_ -gt 90 } { "([91m$_%[0m)"; break }
+                { $_ -gt 70 } { "([93m$_%[0m)"        }
+                default       { "([92m$_%[0m)"        }
             }
         }
     }
@@ -77,7 +76,7 @@ if ($unix) {
     $UsedDiskSizeGB  = [math]::round(($DiskInfo.Size - $DiskInfo.FreeSpace) / 1GB)
     $DiskSizeGB      = [math]::round(($DiskInfo.Size) / 1GB)
     $UsedDiskPercent = "{0:N0}" -f (($UsedDiskSizeGB / $DiskSizeGB) * 100);
-    $diskInfo        = "$UsedDiskSizeGB GB / $DiskSizeGB GB ([92m$UsedDiskPercent%[0m)"
+    $diskInfo        = "$UsedDiskSizeGB GB / $DiskSizeGB GB ([92m$UsedDiskPercent%[0m)"
     #>
 }
 
@@ -181,101 +180,101 @@ _)      \.___.,|     .'
 '@
 } else {
     [string[]] $art = @'
-        [91m,zz::A33tz;,[0m                   
+        [91m,zz::A33tz;,[0m                   
 '@, @'
-        [91m@t:::EE333EE3[0m [92m.[0m                
+        [91m@t:::EE333EE3[0m [92m.[0m                
 '@, @'
-       [91m;Et:::EE33EEE7[0m [92m@Ee.,     .,g[0m    
+       [91m;Et:::EE33EEE7[0m [92m@Ee.,     .,g[0m    
 '@, @'
-      [91m.St:::EE333EE3[0m [92m;EEEEEEttt333#[0m    
+      [91m.St:::EE333EE3[0m [92m;EEEEEEttt333#[0m    
 '@, @'
-      [91m@t:::zE333EE3`[0m[92m.SEEEEEtttt33Q[0m     
+      [91m@t:::zE333EE3`[0m[92m.SEEEEEtttt33Q[0m     
 '@, @'
-     [91m:Et:::EE333EE7[0m [92m@EEEEEEtttt33F[0m     
+     [91m:Et:::EE333EE7[0m [92m@EEEEEEtttt33F[0m     
 '@, @'
-     [91m@P*''``''*4Qj[0m [92m:EEEEEEtttt33@[0m      
+     [91m@P*''``''*4Qj[0m [92m:EEEEEEtttt33@[0m      
 '@, @'
-    [94m,,::::33tz;,[0m [91m*[0m [92m@EEEEEEttz33Q7[0m      
+    [94m,,::::33tz;,[0m [91m*[0m [92m@EEEEEEttz33Q7[0m      
 '@, @'
-   [94m;t::::ztttt33)[0m [93m.[0m [92m*4EEEjjjiP*[0m        
+   [94m;t::::ztttt33)[0m [93m.[0m [92m*4EEEjjjiP*[0m        
 '@, @'
-  [94m:tt::::ttttt33[0m [93m:E3s..[0m  [92m``[0m [93m,,g[0m        
+  [94m:tt::::ttttt33[0m [93m:E3s..[0m  [92m``[0m [93m,,g[0m        
 '@, @'
-  [94mit::::ztttt33F[0m [93mAEEEEEtttttE3F[0m        
+  [94mit::::ztttt33F[0m [93mAEEEEEtttttE3F[0m        
 '@, @'
- [94m;t:::::tttt33V[0m [93m;EEEEEttttttt3[0m         
+ [94m;t:::::tttt33V[0m [93m;EEEEEttttttt3[0m         
 '@, @'
- [94mft::::ztttt337[0m [93m@EEEEttttttt3F[0m         
+ [94mft::::ztttt337[0m [93m@EEEEttttttt3F[0m         
 '@, @'
- [94m@P*''``''*4Qj[0m [93m;EEEEEtttttttZ`[0m         
+ [94m@P*''``''*4Qj[0m [93m;EEEEEtttttttZ`[0m         
 '@, @'
-             [94m`[0m [93mEEEEEtttttttj7[0m          
+             [94m`[0m [93mEEEEEtttttttj7[0m          
 '@, @'
-               [93m`^VEtjjjz>*`[0m            
+               [93m`^VEtjjjz>*`[0m            
 '@
 }
 
 # Currently unused macOS art
 <#
-[string[]]$art = '[38;2;98;187;71m               .zP[0m           ',
-                '[38;2;98;187;71m              f##l[0m           ',
-                '[38;2;98;187;71m             .##P[0m            ',
-                '[38;2;98;187;71m       .dSFz.lF .uqKEp.[0m      ',
-                '[38;2;98;187;71m    .dZP##$##########$KRb.[0m   ',
-                '[38;2;98;187;71m  .dZP##$##############$KRb.[0m ',
-                "[38;2;252;184;41m  dZP###################F*'[0m  ",
-                '[38;2;252;184;41m fZP##################R`[0m     ',
-                '[38;2;244;131;27m fZP#################R[0m       ',
-                '[38;2;244;131;27m HM##################R[0m       ',
-                '[91m HA$###################bz._[0m  ',
-                '[91m HA$#######################P[0m ',
-                '[38;2;150;61;151m \#######################$#F[0m',
-                '[38;2;150;61;151m  \#####################$#F[0m ',
-                '[38;2;0;157;222m   \##################$#/[0m   ',
-                "[38;2;0;157;222m    `*~####~*''*~####~*'[0m     "
+[string[]]$art = '[38;2;98;187;71m               .zP[0m           ',
+                '[38;2;98;187;71m              f##l[0m           ',
+                '[38;2;98;187;71m             .##P[0m            ',
+                '[38;2;98;187;71m       .dSFz.lF .uqKEp.[0m      ',
+                '[38;2;98;187;71m    .dZP##$##########$KRb.[0m   ',
+                '[38;2;98;187;71m  .dZP##$##############$KRb.[0m ',
+                "[38;2;252;184;41m  dZP###################F*'[0m  ",
+                '[38;2;252;184;41m fZP##################R`[0m     ',
+                '[38;2;244;131;27m fZP#################R[0m       ',
+                '[38;2;244;131;27m HM##################R[0m       ',
+                '[91m HA$###################bz._[0m  ',
+                '[91m HA$#######################P[0m ',
+                '[38;2;150;61;151m \#######################$#F[0m',
+                '[38;2;150;61;151m  \#####################$#F[0m ',
+                '[38;2;0;157;222m   \##################$#/[0m   ',
+                "[38;2;0;157;222m    `*~####~*''*~####~*'[0m     "
 
 #>
 
 ####### Printing Output #########
 
 # Line 1 - HostName
-Write-Output "$($art[0]) [91m$Username[0m@[91m$Machine[0m"
+Write-Output "$($art[0]) [91m$Username[0m@[91m$Machine[0m"
 
 # Line 2 - OS
-Write-Output "$($art[1]) [91mOS:[0m $OS $BitVer"
+Write-Output "$($art[1]) [91mOS:[0m $OS $BitVer"
 
 # Line 3 - Kernel
-Write-Output "$($art[2]) [91mKernel:[0m $Kernel"
+Write-Output "$($art[2]) [91mKernel:[0m $Kernel"
 
 # Line 4 - Uptime
-Write-Output "$($art[3]) [91mUptime:[0m ${uptimeHours}h ${uptimeMinutes}m"
+Write-Output "$($art[3]) [91mUptime:[0m ${uptimeHours}h ${uptimeMinutes}m"
 # .Days"d "$uptime.Hours"h " $uptime.Minutes"m " $uptime.Seconds"s " -Separator "";
 
 # Line 5 - Motherboard
-Write-Output "$($art[4]) [91mMotherboard:[0m $($Motherboard.Manufacturer -replace 'Micro-Star International Co., Ltd.', 'MSI') $($Motherboard.Product)"
+Write-Output "$($art[4]) [91mMotherboard:[0m $($Motherboard.Manufacturer -replace 'Micro-Star International Co., Ltd.', 'MSI') $($Motherboard.Product)"
 
 # Line 6 - Shell (Hardcoded since it is unlikely anybody can run this without powershell)
-Write-Output "$($art[5]) [91mShell:[0m PowerShell $($PSVersionTable.PSVersion)"
+Write-Output "$($art[5]) [91mShell:[0m PowerShell $($PSVersionTable.PSVersion)"
 
 # Line 7 - Cmdlets
-Write-Output "$($art[6]) [91mCmdlets:[0m $cmdlets"
+Write-Output "$($art[6]) [91mCmdlets:[0m $cmdlets"
 
 # Line 8 - Resolution (for primary monitor only)
-Write-Output "$($art[7]) [91mDisplay:[0m $MonitorNames ($($GPU.CurrentHorizontalResolution) x $($GPU.CurrentVerticalResolution) @ $($GPU.CurrentRefreshRate) Hz)"
+Write-Output "$($art[7]) [91mDisplay:[0m $MonitorNames ($($GPU.CurrentHorizontalResolution) x $($GPU.CurrentVerticalResolution) @ $($GPU.CurrentRefreshRate) Hz)"
 
 # Line 9 - CPU
-Write-Output "$($art[8]) [91mCPU:[0m $CPU"
+Write-Output "$($art[8]) [91mCPU:[0m $CPU"
 
 # Line 10 - GPU
-Write-Output "$($art[9]) [91mGPU:[0m $($GPU.Name)"
+Write-Output "$($art[9]) [91mGPU:[0m $($GPU.Name)"
 
 # Line 11 - Ram
-Write-Output "$($art[10]) [91mRAM:[0m $UsedRam MB / $TotalRam MB ([92m$UsedRamPercent%[0m)"
+Write-Output "$($art[10]) [91mRAM:[0m $UsedRam MB / $TotalRam MB ([92m$UsedRamPercent%[0m)"
 
 # Line 12 - Disk
 $i = 11
 foreach ($disk in $diskInfo) {
-    Write-Output "$($art[$i]) [91mDisk:[0m $($DISKINFO[11 - $i++])"
+    Write-Output "$($art[$i]) [91mDisk:[0m $($DISKINFO[11 - $i++])"
 }
 
 # Print empty Line to seperate colors
@@ -288,7 +287,7 @@ if (!$unix -and $Colors) {
             Write-Output "$($art[$i++]) $conColorLine"
             $conColorLine = ''
         } else {
-            $conColorLine += '' + $sec + '    [0m'
+            $conColorLine += '' + $sec + '    [0m'
         }
     }
     Write-Output "$($art[$i++]) $conColorLine"
