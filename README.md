@@ -66,6 +66,7 @@ Tools installed per platform:
 | csharpier (C# formatter) | `dotnet tool` | `dotnet tool` | `dotnet tool` |
 | `vim` → `nvim` alias | PowerShell `$PROFILE` | `.bashrc`/`.zshrc` | `.bashrc`/`.zshrc` |
 | Oh My Posh | `winget` | `brew` | `brew` |
+| [powerfetch](https://github.com/jantari/powerfetch) | `$PROFILE` function | `.bashrc`/`.zshrc` | `.bashrc`/`.zshrc` |
 
 ---
 
@@ -178,6 +179,8 @@ The script is idempotent — already-installed tools are skipped, existing nvim 
 dotfiles/
 ├── bootstrap.py                    # Cross-platform bootstrap script
 ├── README.md
+├── powerfetch/
+│   └── powerfetch.ps1              # System info display (credit: jantari/powerfetch)
 └── nvim/                           # Neovim config (copied to ~/.config/nvim)
     ├── init.lua                    # Main config — options, keymaps, plugins
     ├── lazy-lock.json              # Pinned plugin versions

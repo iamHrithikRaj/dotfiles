@@ -593,6 +593,84 @@ def setup_vim_alias(plat: str, dry_run: bool):
         print("    ✓ Done")
 
 
+def setup_powerfetch(plat: str, dry_run: bool):
+    """Install powerfetch script and add a shell function to invoke it.
+
+    Credits: powerfetch by jantari — https://github.com/jantari/powerfetch
+    """
+    print("\n╔══════════════════════════════════════════╗")
+    print("║  Setting up powerfetch                   ║")
+    print("╚══════════════════════════════════════════╝")
+
+    repo_script = Path(__file__).parent / "powerfetch" / "powerfetch.ps1"
+
+    if plat == "windows":
+        install_dir = Path(os.environ.get("ProgramFiles", r"C:\Program Files")) / "powerfetch"
+        dest_script = install_dir / "powerfetch.ps1"
+
+        # Copy the script
+        print(f"  → Installing powerfetch to {install_dir}")
+        if not dry_run:
+            install_dir.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(repo_script, dest_script)
+        print("    ✓ Script installed")
+
+        # Add function to PowerShell profile
+        profile_path = (
+            Path(os.environ.get("USERPROFILE", ""))
+            / "Documents"
+            / "PowerShell"
+            / "Microsoft.PowerShell_profile.ps1"
+        )
+        func_marker = "function powerfetch"
+
+        if profile_path.exists() and func_marker in profile_path.read_text():
+            print("  → powerfetch function already in PowerShell profile")
+            return
+
+        func_block = (
+            '\n# powerfetch — system info display (https://github.com/jantari/powerfetch)\n'
+            'function powerfetch {\n'
+            f'  & "{dest_script}" @args\n'
+            '}\n'
+        )
+        print(f"  → Adding powerfetch function to {profile_path}")
+        if not dry_run:
+            profile_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(profile_path, "a") as f:
+                f.write(func_block)
+        print("    ✓ Done")
+
+    else:
+        # On Linux/macOS, install to ~/.local/bin
+        install_dir = Path.home() / ".local" / "bin"
+        dest_script = install_dir / "powerfetch.ps1"
+
+        print(f"  → Installing powerfetch to {install_dir}")
+        if not dry_run:
+            install_dir.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(repo_script, dest_script)
+        print("    ✓ Script installed")
+
+        shell = os.environ.get("SHELL", "/bin/bash")
+        rc_file = Path.home() / (".zshrc" if "zsh" in shell else ".bashrc")
+        func_marker = "function powerfetch"
+        alias_line = f"function powerfetch {{ pwsh -NoProfile -File '{dest_script}' \"$@\"; }}"
+
+        if rc_file.exists() and func_marker in rc_file.read_text():
+            print(f"  → powerfetch function already in {rc_file.name}")
+            return
+
+        print(f"  → Adding powerfetch function to {rc_file}")
+        if not dry_run:
+            with open(rc_file, "a") as f:
+                f.write(
+                    f"\n# powerfetch — system info display (https://github.com/jantari/powerfetch)\n"
+                    f"{alias_line}\n"
+                )
+        print("    ✓ Done")
+
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # POST-INSTALL SUMMARY
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -717,6 +795,7 @@ def main():
 
     install_nvim_config(args.dry_run)
     setup_vim_alias(plat, args.dry_run)
+    setup_powerfetch(plat, args.dry_run)
     print_summary(plat)
 
     # Exit with error code if any steps failed (useful for CI/scripting)
