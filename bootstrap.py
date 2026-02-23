@@ -200,6 +200,7 @@ LANGUAGES = {
 
 CORE_TOOLS = {
     "windows": {
+        "VC++ Redist": "winget install Microsoft.VCRedist.2015+.x64 --silent --accept-source-agreements --accept-package-agreements",
         "Neovim": "winget install Neovim.Neovim --silent --accept-source-agreements --accept-package-agreements",
         "Git": "winget install Git.Git --silent --accept-source-agreements --accept-package-agreements",
         "ripgrep": "winget install BurntSushi.ripgrep.MSVC --silent --accept-source-agreements --accept-package-agreements",

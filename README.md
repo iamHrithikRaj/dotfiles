@@ -56,6 +56,7 @@ Tools installed per platform:
 
 | Tool | Windows | Linux | macOS |
 |---|---|---|---|
+| VC++ Redistributable | `winget` | — | — |
 | Neovim | `winget` | `apt`/`dnf`/`pacman` | `brew` |
 | Node.js | `winget` | `nodesource` / pkg mgr | `brew` |
 | .NET SDK | `winget` | `apt`/`dnf` | `brew` |
