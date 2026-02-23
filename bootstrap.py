@@ -753,6 +753,11 @@ def print_summary(plat: str):
     for lang in LANGUAGES.values():
         print(f"    • {lang['label']}")
     print()
+    print("  Shell profile configured:")
+    print(f"    • vim → nvim alias")
+    print(f"    • Oh My Posh prompt init")
+    print(f"    • powerfetch function")
+    print()
     print("  Next steps:")
     print("    1. Set your terminal font to 'JetBrainsMono Nerd Font'")
     if plat == "windows":
